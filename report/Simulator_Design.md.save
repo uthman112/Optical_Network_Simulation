@@ -1,6 +1,0 @@
-Say my network is a Data Center network 
-I would be using with a Spine-Leaf topology(other options are fat tree, Clos, DragonFly)
-The network would consist of the following objects, switch, link, server, traffic, routing algorithm, and energy model.
------Each of those would be a python class
-
-
