@@ -6,4 +6,4 @@ class NetworkSwitch:
         self.active = True
 
     def __repr__(self):
-        return f"Switch({self.id}, profile={self.profile}, role={self.role}"
+        return f"Switch('{self.id}', profile='{self.profile}', role='{self.role}'"
