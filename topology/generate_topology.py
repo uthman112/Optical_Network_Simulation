@@ -1,9 +1,11 @@
-from switch import NetworkSwitch
-from link import link
-from network import network
+from topology.switch import NetworkSwitch
+from topology.link import link
+from topology.network import network
+import networkx as nx
 
 
-def generate_spine_leaf_topology(num_spine=2, num_leaf=4, spine_profile="pluggable_100G",leaf_profile="pluggable_100G"):
+
+def generate_spine_leaf_topology(num_spine=2, num_leaf=4, spine_profile="pluggable_400G",leaf_profile="pluggable_400G"):
     net=network()
     spines = [NetworkSwitch(f'spine{i}', profile=spine_profile, role='spine') for i in range(num_spine)]
     leaves = [NetworkSwitch(f'leaf{i}', profile=leaf_profile, role='leaf') for i in range(num_leaf)]
@@ -18,10 +20,17 @@ def generate_spine_leaf_topology(num_spine=2, num_leaf=4, spine_profile="pluggab
             net.add_link(link(s.id, l.id))
     return net
 
-if __name__ == "__main__":
-    my_net = generate_spine_leaf_topology(2,4)
-    for node, data in my_net.graph.nodes(data=True):
-        print(node, '-->', data)
-    for i, l in enumerate(my_net.links()):
-        print(f"link{i}: connects {l.node_a} to {l.node_b}")
+
+
     
+    '''
+    for node_id in my_net.graph.nodes():
+        switch=my_net.get_switch(node_id)
+        switch_index=[]
+        if switch.role == 'leaf':
+            switch_index.append(switch.id)
+        else:
+            continue
+        print(switch_index)
+        print(nx.shortest_path(my_net, source=switch_index[0], target=switch_index[-1]))
+    '''

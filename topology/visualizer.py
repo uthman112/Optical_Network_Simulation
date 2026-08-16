@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import networkx as nx
-from generate_topology import generate_spine_leaf_topology
+from topology.generate_topology import generate_spine_leaf_topology
 
 def visualize_topology(net):
     spines = [s for s in net.switches() if s.role == 'spine']
@@ -26,6 +26,3 @@ def visualize_topology(net):
     return pos
 
 
-if __name__=="__main__":
-    net=generate_spine_leaf_topology(5,20)
-    visualize_topology(net)
