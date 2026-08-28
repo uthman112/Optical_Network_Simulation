@@ -1,6 +1,7 @@
 import topology.generate_topology as generate_topology
 import routing.djikstra_route as djikstra_route
 import topology.visualizer as visualizer
+import traffic.traffic_generator as generate_spine_leaf_traffic
 import pandas as pd
 from collections import defaultdict
 
@@ -25,22 +26,13 @@ print(route)
 visualizer.visualize_topology(my_net)
 '''
 '''-----------------------------break--------------------------------------------------------'''
-#associate traffic to links
-link_bandwidth=pd.read_excel('datasets/traffic_amount.ods')
-link_traffic=defaultdict(int) #defaults to 0 for missing keys
-source=[]; dest=[]; traffic_demand=[]
-for row in link_bandwidth.itertuples():
-    src=row.source_node.lower()
-    dst=row.dest_node.lower()
-    ul_dl_traffic=int(row.amount_of_data_perdirection_Gbps)*2
-    source.append(src); dest.append(dst); traffic_demand.append(ul_dl_traffic)
-    #print(f"source_node: {row.source_node} dest: {row.dest_node} bandwidth: {row.amount_of_data_perdirection_Gbps}")
-    path=djikstra_route.calc_shortest_path_using_djikstra(my_net, src, dst)
-    print(path)
-    for u, v in zip(path[:-1], path[1:]):#zip pairs two array by their index
-        individual_links_in_route=tuple(sorted((u,v)))
-        link_traffic[individual_links_in_route]+=ul_dl_traffic
 
-print("Accumulated Link Traffic (Gbps):")
+
+sources, dests, demands = generate_spine_leaf_traffic.load_traffic_data()
+
+link_traffic = generate_spine_leaf_traffic.calculate_link_traffic(
+    network=my_net, source=sources, dest=dests, traffic_demand=demands
+)
+print("\nAccumulated Link Traffic (Gbps):")
 for link, traffic in link_traffic.items():
     print(f"Link {link}: {traffic} Gbps")
