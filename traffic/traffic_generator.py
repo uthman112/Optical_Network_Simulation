@@ -19,14 +19,15 @@ def load_traffic_data(filepath=dataset_path):
         dst=row.dest_node.lower()
         ul_dl_traffic=int(row.amount_of_data_perdirection_Gbps)*2
         source.append(src); dest.append(dst); traffic_demand.append(ul_dl_traffic)
-        return source, dest, traffic_demand
+    return source, dest, traffic_demand
 
 def calculate_link_traffic(network, source, dest, traffic_demand):
     link_traffic=defaultdict(int) #defaults to 0 for missing keys
     for src, dst, demand in zip(source, dest, traffic_demand):
         path = calc_shortest_path_using_djikstra(network, src, dst)
-    for u, v in zip(path[:-1], path[1:]):#zip pairs two array by their index
-            individual_links_in_route=tuple(sorted((u,v)))
-            link_traffic[individual_links_in_route] += demand
-    return path, link_traffic
+        print(path)
+        for u, v in zip(path[:-1], path[1:]):#zip pairs two array by their index
+                individual_links_in_route=tuple(sorted((u,v)))
+                link_traffic[individual_links_in_route] += demand
+    return link_traffic
 

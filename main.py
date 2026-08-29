@@ -2,6 +2,7 @@ import topology.generate_topology as generate_topology
 import routing.djikstra_route as djikstra_route
 import topology.visualizer as visualizer
 import traffic.traffic_generator as generate_spine_leaf_traffic
+import energy_model.energy_consumption_calc as energy_consumption_calculator_in_watts
 import pandas as pd
 from collections import defaultdict
 
@@ -36,3 +37,11 @@ link_traffic = generate_spine_leaf_traffic.calculate_link_traffic(
 print("\nAccumulated Link Traffic (Gbps):")
 for link, traffic in link_traffic.items():
     print(f"Link {link}: {traffic} Gbps")
+
+
+profiles=energy_consumption_calculator_in_watts.load_device_profiles()
+link_power=energy_consumption_calculator_in_watts.calculate_per_link_energy(link_traffic, my_net, profiles)
+
+print("\nPer-Link Power Consumption (Watts):")
+for link, power in link_power.items():
+    print(f"Link {link}: {power:.4f} W")
