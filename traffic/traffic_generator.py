@@ -26,16 +26,14 @@ def calculate_link_traffic(network, source, dest, traffic_demand):
     for src, dst, demand in zip(source, dest, traffic_demand):
         path = calc_shortest_path_using_djikstra(network, src, dst)
         print(path)
-        '''
-        bidirectional_demand = demand * 2
-        for u, v in zip(path[:-1], path[1:]):
-            physical_hop = tuple(sorted((u, v)))
-            link_traffic[physical_hop] += bidirectional_demand
-            print(f"Route {path}: {bidirectional_demand} Gbps")
+        num_hops = len(path) - 1
+        route_key = (src, dst)
+        
+        link_traffic[route_key] += demand * num_hops
         '''
         for u, v in zip(path[:-1], path[1:]):#zip pairs two array by their index
                 individual_links_in_route=tuple(sorted((u,v)))
                 link_traffic[individual_links_in_route] += demand
-        
+        '''
     return link_traffic
 
