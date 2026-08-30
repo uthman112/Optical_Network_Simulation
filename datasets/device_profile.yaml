@@ -1,34 +1,34 @@
 ﻿pluggable_400G:
-	energy_per_bit_pj: 30
-	bandwidth_gbps: 400
-	source: QSFP-DD MSA Thermal Whitepaper, Jan 2021 (10–14W range at 400G) 
-	derived: true
-	note: calculated from the 10-14W range reported
+  energy_per_bit_pj: 30
+  bandwidth_gbps: 400
+  source: QSFP-DD MSA Thermal Whitepaper, Jan 2021 (10–14W range at 400G) 
+  derived: true
+  note: calculated from the 10-14W range reported
 
 pluggable_800G:
-	energy_per_bit_pj: 18.75
-	bandwidth_gbps: 800
-	source: Broadcom/Meta 800G 2xFR4, ECOC 2025, cited by SemiAnalysis
-	derived: true
-	note: calculated from the 15W reported power at 800G 
+  energy_per_bit_pj: 18.75
+  bandwidth_gbps: 800
+  source: Broadcom/Meta 800G 2xFR4, ECOC 2025, cited by SemiAnalysis
+  derived: true
+  note: calculated from the 15W reported power at 800G 
 
 cpo_400G:
-	energy_per_bit_pj: 6
-	bandwidth_gbps: 400
-	source: Micas Networks press release, 2025 ("CPO: Stop Burning Cash" / volume production announcement)
-	derived: false
-	note: ceiling/upper-bound value as stated by vendor, not a measured mean-to state this in result comparison
+  energy_per_bit_pj: 6
+  bandwidth_gbps: 400
+  source: 'Micas Networks press release, 2025 ("CPO: Stop Burning Cash" / volume production announcement)'
+  derived: false
+  note: ceiling/upper-bound value as stated by vendor, not a measured mean-to state this in result comparison
 
 cpo_800G:
-	energy_per_bit_pj: 6.75
-	bandwidth_gbps: 800
-	source: Broadcom Bailly, cross-checked Meta @ ECOC 2025 (5.4W) and ServeTheHome (5.5W)
-	derived: true (derived from ~5.4–5.5W across sources)
-	note: "averaged from two independent sources reporting the same device"
+  energy_per_bit_pj: 6.75
+  bandwidth_gbps: 800
+  source: Broadcom Bailly, cross-checked Meta @ ECOC 2025 (5.4W) and ServeTheHome (5.5W)
+  derived: true (derived from ~5.4–5.5W across sources)
+  note: "averaged from two independent sources reporting the same device"
 
 
 asic_baseline:
-	power_per_tbps_w: 9.8
-	source: Broadcom Tomahawk 5 (BCM78900) + Marvell Teralynx T100, both chip-only estimates, averaged
-	derived: true
-	note: "9.77 W/Tbps (Tomahawk 5) and 9.79 W/Tbps (Teralynx T100) averaged; Nvidia Spectrum-4 excluded (full-system figure, not chip-only, not comparable)"
+  power_per_tbps_w: 9.8
+  source: Broadcom Tomahawk 5 (BCM78900) + Marvell Teralynx T100, both chip-only estimates, averaged
+  derived: true
+  note: "9.77 W/Tbps (Tomahawk 5) and 9.79 W/Tbps (Teralynx T100) averaged; Nvidia Spectrum-4 excluded (full-system figure, not chip-only, not comparable)"

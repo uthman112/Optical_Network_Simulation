@@ -18,8 +18,8 @@ def calculate_per_link_energy(link_traffic, network, profiles):
         switch_a=network.get_switch(node_a)
         profile_name=switch_a.profile
 
-        energy_per_bit=profiles[profile_name]['energy_per_bit_pj']
-        power_watts= (traffic_gbps*1e9)*(energy_per_bit*1e-12)
+        energy_per_bit_pj=profiles[profile_name]['energy_per_bit_pj']
+        power_watts= (traffic_gbps*1e9)*(energy_per_bit_pj*1e-12)
         link_power_watts[links]=power_watts
 
     return link_power_watts
