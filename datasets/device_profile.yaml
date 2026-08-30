@@ -28,7 +28,7 @@ cpo_800G:
 
 
 asic_baseline:
-  power_per_tbps_w: 9.8
+  power_per_tbps_watts: 9.8
   source: Broadcom Tomahawk 5 (BCM78900) + Marvell Teralynx T100, both chip-only estimates, averaged
   derived: true
   note: "9.77 W/Tbps (Tomahawk 5) and 9.79 W/Tbps (Teralynx T100) averaged; Nvidia Spectrum-4 excluded (full-system figure, not chip-only, not comparable)"
