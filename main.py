@@ -32,6 +32,7 @@ visualizer.visualize_topology(my_net)
 '''-----------------------------break--------------------------------------------------------'''
 optical_interconnects=['pluggable_400G', 'cpo_400G', 'pluggable_800G', 'cpo_800G']
 optical_interconnects_and_total_power_consumed={}
+result_lists=[]
 for optical_interconnect_technologies in optical_interconnects:
     i=0
     my_net, link_traffic, link_power, single_switch_asic_power, total_network_asic_power, total_power_consumption_in_network=generate_topology.generate_topology_and_return_power_consumption('spine_leaf',2,4,optical_interconnect_technologies,50)
@@ -51,9 +52,21 @@ for optical_interconnect_technologies in optical_interconnects:
     print(f"Baseline power consumption for all nodes in the netowrk is {total_network_asic_power:.4f}W")
     print(f"\nTotal energy consumption in this spine-leaf topology with {i} nodes utilizing {switch_profile} is {total_power_consumption_in_network:.4f}W")
     optical_interconnects_and_total_power_consumed[switch_profile]=round(total_power_consumption_in_network,4)
+    per_link_power=list(link_power.values())[0]
+    total_link_power=sum(link_power.values())
+    result_lists.append({
+        "Technology": switch_profile,
+        "Per-Link Power (W)": round(per_link_power,4),
+        "Total Link Power (W)": round(total_link_power,4),
+        "Node Baseline Power (W)": round(total_network_asic_power,4),
+        "Total Network Power (W)": round(total_power_consumption_in_network,4),
+    })
 print(optical_interconnects_and_total_power_consumed)
 
-df=pd.DataFrame(list(optical_interconnects_and_total_power_consumed.items))
+df=pd.DataFrame(list(result_lists))#write to simulation_result/
+df.to_csv('simulation_result/optical_interconnect_simulation_breakdown.csv', index=False)
+print(f"\n Created a breakdown of the results in simulation_result/optical_interconnect_simulation_breakdown.csv")
+
 
 
 
