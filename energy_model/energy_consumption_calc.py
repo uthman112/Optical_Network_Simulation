@@ -30,7 +30,7 @@ def calculate_ASIC_baseline_power(network, profiles):
     for node_id in network.graph.nodes():
         switch = network.get_switch(node_id)
         switch_profile = switch.profile
-        port_bandwidth = profiles[switch_profile]['bandwidth_gbps']
+        port_bandwidth = profiles['asic_baseline']['per_port_bandwidth']
         switch_power = (switch.port_count * port_bandwidth * 1e-3) * asic_power
         total_network_asic_power += switch_power
     return switch_power, total_network_asic_power

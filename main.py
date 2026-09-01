@@ -4,7 +4,7 @@ import topology.visualizer as visualizer
 import traffic.traffic_generator as generate_spine_leaf_traffic
 import energy_model.energy_consumption_calc as energy_consumption_calculator_in_watts
 import pandas as pd
-from collections import defaultdict
+
 
 '''
 for node, data in my_net.graph.nodes(data=True):
@@ -30,21 +30,32 @@ visualizer.visualize_topology(my_net)
 
 
 '''-----------------------------break--------------------------------------------------------'''
-i=0
-my_net, link_traffic, link_power, single_switch_asic_power, total_network_asic_power, total_power_consumption_in_network=generate_topology.generate_topology_and_return_power_consumption('spine_leaf',2,4,'pluggable_400G',50)
-print("\nAccumulated Link Traffic (Gbps):")
-for link, traffic in link_traffic.items():
-    print(f"Link {link}: {traffic} Gbps")
+optical_interconnects=['pluggable_400G', 'cpo_400G', 'pluggable_800G', 'cpo_800G']
+optical_interconnects_and_total_power_consumed={}
+for optical_interconnect_technologies in optical_interconnects:
+    i=0
+    my_net, link_traffic, link_power, single_switch_asic_power, total_network_asic_power, total_power_consumption_in_network=generate_topology.generate_topology_and_return_power_consumption('spine_leaf',2,4,optical_interconnect_technologies,50)
+    print("\nAccumulated Link Traffic (Gbps):")
+    for link, traffic in link_traffic.items():
+        print(f"Link {link}: {traffic} Gbps")
 
 
-print("\nPer-Link Power Consumption (Watts):")
-for link, power in link_power.items():
-    print(f"Link {link}: {power:.4f} W")
-for node, data in my_net.graph.nodes(data=True):
-    i+=1
-print(f"\nASIC baseline power consumption for a single switch per Tbps is {single_switch_asic_power:.4f}W")
-print(f"ASIC power consumption for all nodes in the netowrk is {total_network_asic_power:.4f}W")
-print(f"\nTotal energy consumption in this spine-leaf topology with {i} nodes is {total_power_consumption_in_network:.4f}W")
+    print("\nPer-Link Power Consumption (Watts):")
+    for link, power in link_power.items():
+        print(f"Link {link}: {power:.4f} W")
+    for node, data in my_net.graph.nodes(data=True):
+        i+=1
+        switch=my_net.get_switch(node)
+        switch_profile=switch.profile
+    print(f"\nASIC baseline power consumption for a single switch per Tbps is {single_switch_asic_power:.4f}W")
+    print(f"Baseline power consumption for all nodes in the netowrk is {total_network_asic_power:.4f}W")
+    print(f"\nTotal energy consumption in this spine-leaf topology with {i} nodes utilizing {switch_profile} is {total_power_consumption_in_network:.4f}W")
+    optical_interconnects_and_total_power_consumed[switch_profile]=round(total_power_consumption_in_network,4)
+print(optical_interconnects_and_total_power_consumed)
+
+df=pd.DataFrame(list(optical_interconnects_and_total_power_consumed.items))
+
+
 
 
 
