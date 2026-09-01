@@ -11,6 +11,9 @@ import networkx as nx
 import csv
 import itertools
 import pandas as pd
+import traffic.traffic_generator as generate_traffic_between_leaves
+import energy_model.energy_consumption_calc as energy_consumption_calculator_in_watts
+
 
 dataset_path = os.path.join(base_dir, 'datasets', 'traffic_amount.ods')
 
@@ -40,6 +43,25 @@ def generate_spine_leaf_topology(num_spine=2, num_leaf=4, spine_profile="pluggab
     return net
 
 
+def change_switch_profiles(network, profile_intended):
+    switch_ids=list(network.graph.nodes)
+    for node_ids in switch_ids:
+        switch=network.get_switch(node_ids)
+        switch.profile=profile_intended
+
+    return network
+
+
+def generate_topology_and_return_power_consumption(topology_type='spine_leaf', num_of_spines=2, num_of_leaves=4, switch_profiles="pluggable_400G", traffic_band=50):
+    if topology_type=='spine_leaf':
+        my_net=generate_spine_leaf_topology(num_of_spines, num_of_leaves,spine_profile=switch_profiles, leaf_profile=switch_profiles, traffic_demand_gbps=traffic_band)
+        sources, dests, demands = generate_traffic_between_leaves.load_traffic_data()
+        link_traffic = generate_traffic_between_leaves.calculate_link_traffic(network=my_net, source=sources, dest=dests, traffic_demand=demands)   
+        profiles=energy_consumption_calculator_in_watts.load_device_profiles()
+        link_power=energy_consumption_calculator_in_watts.calculate_per_link_energy(link_traffic, my_net, profiles)
+        single_switch_asic_power, total_network_asic_power=energy_consumption_calculator_in_watts.calculate_ASIC_baseline_power(my_net, profiles)
+        total_power_consumption_in_network= energy_consumption_calculator_in_watts.total_energy_consumption_in_network(link_traffic, my_net)
+        return my_net, link_traffic, link_power, single_switch_asic_power, total_network_asic_power, total_power_consumption_in_network
 
     
     '''
